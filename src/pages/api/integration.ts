@@ -46,8 +46,6 @@ const integration = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   res.redirect(next)
-
-  console.log("test")
 }
 
 // noinspection JSUnusedGlobalSymbols
