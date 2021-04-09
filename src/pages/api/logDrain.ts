@@ -1,11 +1,10 @@
-import { connectDb, cors, internalServerError, runMiddleware } from "next-library"
-import config from "../../config"
+import { cors, internalServerError, runMiddleware } from "next-library"
 import { NextApiRequest, NextApiResponse } from "next"
 import Log from "../../vercel/models/log"
 import axios from "axios"
 
 const integration = async (req: NextApiRequest, res: NextApiResponse) => {
-  await runMiddleware(req, res, cors(), connectDb(config.databaseUrl))
+  await runMiddleware(req, res, cors())
 
   const logs = req.body as Log[]
 
