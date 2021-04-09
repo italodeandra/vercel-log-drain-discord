@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <NoSsr>
       <FullBoxCenter>
-        Hi
+        Hi!
       </FullBoxCenter>
     </NoSsr>
   )
