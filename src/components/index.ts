@@ -1,0 +1,1 @@
+export { default as FullBoxCenter } from "./FullBoxCenter/FullBoxCenter"
