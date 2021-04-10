@@ -20,7 +20,6 @@
   },
   "include": [
     "next-env.d.ts",
-    "node_modules/@material-ui/core",
     "**/*.ts",
     "**/*.tsx"
   ],
