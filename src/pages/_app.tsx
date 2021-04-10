@@ -4,25 +4,11 @@ import { CacheProvider } from "@emotion/react"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import createCache from "@emotion/cache"
 import theme from "../theme"
-import { useEffect, VFC } from "react"
-import { NProgress, Snackbar } from "react-library"
-import { QueryClientProvider } from "react-query"
-import { Hydrate } from "react-query/hydration"
-import useQueryClientRef from "../queryClient"
+import { VFC } from "react"
 
 export const cache = createCache({ key: "css", prepend: true })
 
 const MyApp: VFC<any> = ({ Component, pageProps }) => {
-  const queryClientRef = useQueryClientRef()
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side")
-    if (jssStyles?.parentElement) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-  }, [])
-
   return (
     <CacheProvider value={cache}>
       <Head>
@@ -33,13 +19,7 @@ const MyApp: VFC<any> = ({ Component, pageProps }) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
-        <QueryClientProvider client={queryClientRef.current}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <Snackbar />
-            <NProgress />
-            <Component {...pageProps} />
-          </Hydrate>
-        </QueryClientProvider>
+        <Component {...pageProps} />
       </ThemeProvider>
     </CacheProvider>
   )
