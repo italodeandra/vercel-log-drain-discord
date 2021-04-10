@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "debug": "cross-env NODE_OPTIONS='--inspect' next dev",
-    "test": "echo not implemented yet"
+    "test": "echo not implemented yet",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --cache --fix",
