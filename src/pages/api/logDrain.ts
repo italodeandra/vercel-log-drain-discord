@@ -4,6 +4,8 @@ import Log from "../../vercel/models/log"
 import axios, { AxiosError } from "axios"
 import FormData from "form-data"
 
+const wrapCode = (str = "") => `\`\`\`\n${str}\n\`\`\``
+
 const integration = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors())
 
@@ -12,20 +14,20 @@ const integration = async (req: NextApiRequest, res: NextApiResponse) => {
   logs = logs.filter((l) => l.statusCode?.toString().startsWith("5"))
   for (let log of logs) {
     try {
-      const json = JSON.stringify(log, null, 2)
-      if (json.length < 1980) {
+      const content = log.message || JSON.stringify(log, null, 2)
+      if (content.length < 2000 - wrapCode().length) {
         await axios.post(
           "https://discord.com/api/webhooks/830165634360016917/B4AgSgzn0fFgfLXOzNFtUsJrQkTDp3xaeVsCA6vkrtDx3fwjQ_SfznSl35fsbKqXhaMN",
           {
-            content: `\`\`\`json\n${json}\n\`\`\``.substr(0, 1999),
+            content: wrapCode(content),
           }
         )
       } else {
         let formData = new FormData()
-        formData.append("file", json, {
-          contentType: "application/json",
-          knownLength: json.length,
-          filename: "big-log.json",
+        formData.append("file", content, {
+          contentType: "text/plain",
+          knownLength: content.length,
+          filename: "big-log.txt",
         })
         await axios.post(
           "https://discord.com/api/webhooks/830165634360016917/B4AgSgzn0fFgfLXOzNFtUsJrQkTDp3xaeVsCA6vkrtDx3fwjQ_SfznSl35fsbKqXhaMN",
