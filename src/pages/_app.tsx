@@ -6,8 +6,8 @@ const MyApp: VFC<any> = ({ Component, pageProps }) => {
     <>
       <Head>
         <title>Vercel Log Drain Discord</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <link rel="icon" href={"/favicon.ico"} />
+        <meta content="initial-scale=1, width=device-width" name="viewport" />
+        <link href={"/favicon.ico"} rel="icon" />
       </Head>
 
       <Component {...pageProps} />

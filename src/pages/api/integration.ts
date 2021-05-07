@@ -1,12 +1,17 @@
-import { badRequest, cors, internalServerError, runMiddleware } from "next-library"
-import config from "../../config"
+import {
+  badRequest,
+  cors,
+  internalServerError,
+} from "@italodeandra/pijama/server"
 import { NextApiRequest, NextApiResponse } from "next"
-import vercelAxios from "../../vercel/vercelAxios"
 import { AxiosError } from "axios"
+import config from "../../config"
+import { use } from "next-api-middleware"
+import vercelAxios from "../../vercel/vercelAxios"
+
+const withMiddleware = use(cors())
 
 const integration = async (req: NextApiRequest, res: NextApiResponse) => {
-  await runMiddleware(req, res, cors())
-
   const { code, configurationId, next } = req.query as {
     code: string
     configurationId: string
@@ -26,19 +31,23 @@ const integration = async (req: NextApiRequest, res: NextApiResponse) => {
     const accessToken = await vercelAxios
       .post("/v2/oauth/access_token", params, {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       })
       .then((res) => res.data.access_token)
-    await vercelAxios.post("/v1/integrations/log-drains", {
-      "name": "Discord Log Drain",
-      "type": "json",
-      "url": `${config.baseUrl}/api/logDrain`
-    }, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+    await vercelAxios.post(
+      "/v1/integrations/log-drains",
+      {
+        name: "Discord Log Drain",
+        type: "json",
+        url: `${config.baseUrl}/api/logDrain`,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
-    })
+    )
   } catch (e) {
     const err: AxiosError = e
     console.error(err.isAxiosError ? err.response.data : err)
@@ -49,4 +58,4 @@ const integration = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default integration
+export default withMiddleware(integration)

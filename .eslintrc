@@ -1,15 +1,5 @@
 {
   "extends": [
-    "plugin:@next/next/recommended"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "requireConfigFile": false,
-    "sourceType": "module",
-    "babelOptions": {
-      "presets": [
-        "next/babel"
-      ]
-    }
-  }
+    "./node_modules/@italodeandra/pijama/.eslintrc"
+  ]
 }
